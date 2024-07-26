@@ -1,7 +1,12 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\src\\main",
+    "\\src\\main\\java",
+    "\\src\\main\\java\\com",
+    "\\src\\main\\java\\com\\TrungTinhFullStack",
+    "\\src\\main\\java\\com\\TrungTinhFullStack\\blog_backend_http",
+    "\\src\\main\\java\\com\\TrungTinhFullStack\\blog_backend_http\\Package"
   ],
-  "SelectedNode": "\\C:\\Users\\asus\\Downloads\\New folder",
   "PreviewInSolutionExplorer": false
 }
