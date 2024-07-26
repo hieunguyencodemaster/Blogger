@@ -1,13 +1,19 @@
 package com.TrungTinhFullStack.blog_backend_http.Controller;
 
 import com.TrungTinhFullStack.blog_backend_http.Entity.Post;
+import com.TrungTinhFullStack.blog_backend_http.Repository.PostRepository;
 import com.TrungTinhFullStack.blog_backend_http.Service.PostService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -17,15 +23,27 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @PostMapping
-    public ResponseEntity<?> createPost(@RequestBody Post post) {
-        try {
-            Post createdPost = postService.savePost(post);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdPost);
+    @Autowired
+    private PostRepository postRepository;
 
-        }catch (Exception e) {
-              return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+//    @PostMapping
+//    public ResponseEntity<?> createPost(@RequestBody Post post) {
+//        try {
+//            Post createdPost = postService.savePost(post);
+//            return ResponseEntity.status(HttpStatus.CREATED).body(createdPost);
+//
+//        }catch (Exception e) {
+//              return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//    }
+
+    @PostMapping
+    public Post createPost(@RequestParam("name") String name,
+                           @RequestParam("content") String content,
+                           @RequestParam("postedBy") Long userId,
+                           @RequestParam("img") MultipartFile img,
+                           @RequestParam("tags") List<String> tags) throws IOException {
+        return postService.createPost(name, content, userId, img, tags);
     }
 
     @GetMapping
@@ -69,9 +87,14 @@ public class PostController {
     @GetMapping("/search/{name}")
     public ResponseEntity<?> searchByName(@PathVariable String name) {
         try{
-            return ResponseEntity.status(HttpStatus.OK).body(postService.searchByName(name));
+            return ResponseEntity.status(HttpStatus.OK).body(postRepository.findByNameContaining(name));
         }catch(Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @GetMapping("/newPost")
+    public List <Post> findLast3Posts() {
+        return postRepository.findLast3Posts();
     }
 }

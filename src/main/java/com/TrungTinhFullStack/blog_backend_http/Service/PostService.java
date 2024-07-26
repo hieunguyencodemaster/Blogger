@@ -1,12 +1,14 @@
 package com.TrungTinhFullStack.blog_backend_http.Service;
 
 import com.TrungTinhFullStack.blog_backend_http.Entity.Post;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface PostService {
 
-    Post savePost(Post post);
+    public Post createPost(String name, String content, Long userId, MultipartFile img, List<String> tags) throws IOException;
     List<Post> getAllPosts();
     Post getPostById(Long postId);
     void likePost(Long postId);
