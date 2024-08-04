@@ -43,9 +43,10 @@ public class UserService {
         }
 
         // Create a new admin user
-        User admin = new User();
-        admin.setUsername("admin");
-        admin.setPassword(hashPassword("admin270903")); // Default password "admin"
+        User admin = User.builder()
+                .username("admin")
+                .password(hashPassword("admin270903"))// Default password "admin"
+                .build();
         // Set other properties if needed
 
         userRepository.save(admin);
