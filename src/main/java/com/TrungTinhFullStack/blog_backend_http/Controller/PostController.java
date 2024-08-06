@@ -65,6 +65,24 @@ public class PostController {
         }
     }
 
+    @PutMapping("/{postId}")
+    public ResponseEntity<?> updatePost(
+            @PathVariable Long postId,
+            @RequestParam("name") String name,
+            @RequestParam("content") String content,
+            @RequestParam("postedBy") Long userId,
+            @RequestParam(value = "img", required = false) MultipartFile img,
+            @RequestParam("tags") List<String> tags) throws IOException {
+        try {
+            Post updatedPost = postService.updatePost(postId, name, content, userId, img, tags);
+            return ResponseEntity.ok(updatedPost);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
     @PutMapping("/{postId}/like")
     public ResponseEntity<?> likePost(@PathVariable Long postId) {
         try {

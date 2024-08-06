@@ -71,6 +71,27 @@ public class PostServiceImpl implements PostService{
         }
     }
 
+    @Override
+    public Post updatePost(Long postId, String name, String content, Long userId, MultipartFile img, List<String> tags) throws IOException {
+        User user = userRepository.findById(userId).orElse(null);
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found with id " + postId));
+
+        post.setName(name);
+        post.setContent(content);
+        post.setPostedBy(user);
+        post.setTags(tags);
+
+        if (img != null && !img.isEmpty()) {
+            byte[] bytes = img.getBytes();
+            Path path = Paths.get("uploads/" + img.getOriginalFilename());
+            Files.write(path, bytes);
+            post.setImg(img.getOriginalFilename());
+        }
+
+        return postRepository.save(post);
+    }
+
     public void likePost(Long postId) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if(optionalPost.isPresent()) {
