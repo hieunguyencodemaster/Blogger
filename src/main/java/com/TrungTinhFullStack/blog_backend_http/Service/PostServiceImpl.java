@@ -92,6 +92,11 @@ public class PostServiceImpl implements PostService{
         return postRepository.save(post);
     }
 
+    @Override
+    public void deletePost(Long postId) {
+        postRepository.deleteById(postId);
+    }
+
     public void likePost(Long postId) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if(optionalPost.isPresent()) {

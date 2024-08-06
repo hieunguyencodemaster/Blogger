@@ -83,6 +83,12 @@ public class PostController {
         }
     }
 
+    @DeleteMapping("/{postId}")
+    public void deletePost(@PathVariable Long postId) {
+        postService.deletePost(postId);
+    }
+
+
     @PutMapping("/{postId}/like")
     public ResponseEntity<?> likePost(@PathVariable Long postId) {
         try {
