@@ -17,4 +17,5 @@ public interface PostService {
     Post updatePost(Long postId, String name, String content, Long userId, MultipartFile img,List<String> tags) throws IOException;
     void deletePost(Long postId);
     Post findById(Long postId);
+    List<Post> findByPostedById(Long id);
 }

@@ -88,6 +88,10 @@ public class PostController {
         postService.deletePost(postId);
     }
 
+    @GetMapping("/byUser/{userId}")
+    public List<Post> getAllPostByUserId(@PathVariable Long userId) {
+        return postService.findByPostedById(userId);
+    }
 
     @PutMapping("/{postId}/like")
     public ResponseEntity<?> likePost(@PathVariable Long postId) {
