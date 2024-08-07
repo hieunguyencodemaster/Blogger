@@ -79,6 +79,7 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 
+    // Update User Logic..
     public User updateUser(Long id, User newUser) {
         return userRepository.findById(id)
                 .map(user -> {
@@ -92,6 +93,7 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 
+    // Delete userlogic.....
     public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
             throw new EntityNotFoundException("User not found");
