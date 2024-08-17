@@ -39,4 +39,22 @@ public class CommentServiceImpl implements CommentService{
     public List<Comment> getCommentByPostId(Long postId) {
         return commentRepository.findByPostId(postId);
     }
+    @Override
+    public List<Comment> getCommentByUserId(Long userId) {
+        return commentRepository.findByPostedBy_Id(userId);
+    }
+
+    @Override
+    public Comment getCommentById(Long commentId) {
+        return commentRepository.findById(commentId).orElse(null);
+    }
+
+    @Override
+    public Comment updateComment(Long commentId, Comment comment) {
+
+        Comment comment1 = commentRepository.findById(commentId).orElse(null);
+        comment1.setContent(comment.getContent());
+        comment1.setCreatedAt(new Date());
+        return commentRepository.save(comment1);
+    }
 }

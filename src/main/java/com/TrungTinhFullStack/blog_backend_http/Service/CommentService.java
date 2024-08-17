@@ -10,4 +10,7 @@ public interface CommentService {
 
     Comment createComment(Post post, User postedBy, String content);
     List<Comment> getCommentByPostId(Long postId);
+    List<Comment> getCommentByUserId(Long userId);
+    Comment getCommentById(Long commentId);
+    Comment updateComment(Long commentId, Comment comment);
 }

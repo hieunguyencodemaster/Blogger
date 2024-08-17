@@ -51,4 +51,31 @@ public class CommentController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something Went Wrong");
         }
     }
+
+    @GetMapping("comments/byUser/{userId}")
+    public ResponseEntity<?> getCommentByUserId(@PathVariable Long userId) {
+        try{
+            return ResponseEntity.ok(commentService.getCommentByUserId(userId));
+        }catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something Went Wrong");
+        }
+    }
+
+    @GetMapping("comments/{commentId}")
+    public ResponseEntity<?> getCommentById(@PathVariable Long commentId) {
+        try{
+            return ResponseEntity.ok(commentService.getCommentById(commentId));
+        }catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something Went Wrong");
+        }
+    }
+
+    @PutMapping("/comments/{commentId}")
+    public ResponseEntity<?> updateComment(@PathVariable Long commentId,@RequestBody Comment comment) {
+        try{
+            return ResponseEntity.ok(commentService.updateComment(commentId,comment));
+        }catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something Went Wrong");
+        }
+    }
 }
