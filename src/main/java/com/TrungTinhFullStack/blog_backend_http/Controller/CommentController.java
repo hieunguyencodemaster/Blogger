@@ -43,6 +43,15 @@ public class CommentController {
         }
     }
 
+    @GetMapping("comments")
+    public ResponseEntity<?> getCommentAll() {
+        try{
+            return ResponseEntity.ok(commentService.getCommentAll());
+        }catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something Went Wrong");
+        }
+    }
+
     @GetMapping("comments/{postId}")
     public ResponseEntity<?> getCommentByPostId(@PathVariable Long postId) {
         try{
