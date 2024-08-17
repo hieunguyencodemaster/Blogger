@@ -57,4 +57,11 @@ public class CommentServiceImpl implements CommentService{
         comment1.setCreatedAt(new Date());
         return commentRepository.save(comment1);
     }
+
+    @Override
+    public Comment deleteComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElse(null);
+        commentRepository.delete(comment);
+        return comment;
+    }
 }
