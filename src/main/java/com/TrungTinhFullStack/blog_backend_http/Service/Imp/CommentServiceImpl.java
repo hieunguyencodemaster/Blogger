@@ -1,10 +1,11 @@
-package com.TrungTinhFullStack.blog_backend_http.Service;
+package com.TrungTinhFullStack.blog_backend_http.Service.Imp;
 
 import com.TrungTinhFullStack.blog_backend_http.Entity.Comment;
 import com.TrungTinhFullStack.blog_backend_http.Entity.Post;
 import com.TrungTinhFullStack.blog_backend_http.Entity.User;
 import com.TrungTinhFullStack.blog_backend_http.Repository.CommentRepository;
 import com.TrungTinhFullStack.blog_backend_http.Repository.PostRepository;
+import com.TrungTinhFullStack.blog_backend_http.Service.CommentService;
 import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.sql.model.internal.OptionalTableUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CommentServiceImpl implements CommentService{
+public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private CommentRepository commentRepository;
