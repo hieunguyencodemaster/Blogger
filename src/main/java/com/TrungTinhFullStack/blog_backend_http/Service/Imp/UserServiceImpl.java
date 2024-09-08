@@ -5,8 +5,13 @@ import com.TrungTinhFullStack.blog_backend_http.Repository.UserRepository;
 import com.TrungTinhFullStack.blog_backend_http.Service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -16,6 +21,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    private static final String UPLOAD_DIR = "/uploads";
+
     @Override
     public User login(String username, String password) {
         String hashedPassword = hashPassword(password);
@@ -23,22 +30,37 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(User user) {
+    public User register(String username, String password, String email, MultipartFile img) throws IOException {
         // Check if username already exists
-        if (userRepository.findByUsername(user.getUsername()) != null) {
+        User user = new User();
+        if (userRepository.findByUsername(username) != null) {
             throw new RuntimeException("Username already exists");
         }
+        // Tạo thư mục uploads nếu chưa tồn tại
+        Path uploadPath = Paths.get(UPLOAD_DIR);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        // Xử lý tệp hình ảnh
+        String fileName = img.getOriginalFilename();
+        Path filePath = uploadPath.resolve(fileName);
+        Files.write(filePath, img.getBytes());
+
 
         // Hash the password before saving
-        String hashedPassword = hashPassword(user.getPassword());
+        String hashedPassword = hashPassword(password);
         user.setPassword(hashedPassword);
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setImg(fileName);
 
         // Save the user
         return userRepository.save(user);
     }
 
     @Override
-    public void createInitialAdmin() {
+    public void createInitialAdmin() throws IOException {
         // Check if admin already exists
         if (userRepository.findByUsername("admin") != null) {
             return; // Admin already exists
@@ -47,7 +69,9 @@ public class UserServiceImpl implements UserService {
         // Create a new admin user
         User admin = User.builder()
                 .username("admin")
-                .password(hashPassword("admin270903"))// Default password "admin"
+                .password(hashPassword("admin270903"))
+                .email("admin@gmail.com")
+                .img("admin.png")// Default password "admin"
                 .build();
         // Set other properties if needed
 
@@ -88,14 +112,18 @@ public class UserServiceImpl implements UserService {
 
     // Update User Logic..
     @Override
-    public User updateUser(Long id, User newUser) {
+    public User updateUser(Long id, String username, String password, String email, MultipartFile img) {
         return userRepository.findById(id)
                 .map(user -> {
-                    user.setUsername(newUser.getUsername());
-                    if (newUser.getPassword() != null && !newUser.getPassword().isEmpty()) {
-                        user.setPassword(hashPassword(newUser.getPassword()));
+                    user.setUsername(username);
+                    if (password != null && !password.isEmpty()) {
+                        user.setPassword(hashPassword(password));
                     }
+                    user.setEmail(email);
                     // Update other fields as necessary
+                    if (img != null && !img.isEmpty()) {
+                        user.setImg(img.getOriginalFilename());
+                    }
                     return userRepository.save(user);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));

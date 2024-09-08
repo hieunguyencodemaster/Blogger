@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -36,11 +38,15 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
+    public ResponseEntity<String> register(@RequestParam("username") String username,
+                                           @RequestParam("password") String password,
+                                           @RequestParam("email") String email,
+                                           @RequestParam("img") MultipartFile img
+    ) {
         try {
-            userService.register(user);
+            userService.register(username,password,email,img);
             return ResponseEntity.ok("Registration successful!");
-        } catch (RuntimeException e) {
+        } catch (RuntimeException | IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -56,8 +62,11 @@ public class AuthController {
     }
 
     @PutMapping("/users/{id}")
-    public User updateUser(@PathVariable Long id,@RequestBody User user) {
-        return userService.updateUser(id,user);
+    public User updateUser(@PathVariable Long id,@RequestParam("username") String username,
+                           @RequestParam("password") String password,
+                           @RequestParam("email") String email,
+                           @RequestParam("img") MultipartFile img) {
+        return userService.updateUser(id,username,password,email,img);
     }
 
     @DeleteMapping("/users/{id}")
