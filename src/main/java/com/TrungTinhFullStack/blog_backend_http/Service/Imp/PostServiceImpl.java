@@ -1,7 +1,9 @@
 package com.TrungTinhFullStack.blog_backend_http.Service.Imp;
 
+import com.TrungTinhFullStack.blog_backend_http.Entity.Notification;
 import com.TrungTinhFullStack.blog_backend_http.Entity.Post;
 import com.TrungTinhFullStack.blog_backend_http.Entity.User;
+import com.TrungTinhFullStack.blog_backend_http.Repository.NotificationRepository;
 import com.TrungTinhFullStack.blog_backend_http.Repository.PostRepository;
 import com.TrungTinhFullStack.blog_backend_http.Repository.UserRepository;
 import com.TrungTinhFullStack.blog_backend_http.Service.PostService;
@@ -27,6 +29,9 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
     private static final String UPLOAD_DIR = "uploads/";
 
     public Post createPost(String name, String content, Long userId, MultipartFile img, List<String> tags) throws IOException {
@@ -53,6 +58,16 @@ public class PostServiceImpl implements PostService {
         post.setLikeCount(0);
         post.setViewCount(0);
         post.setTags(tags);
+
+        List<User> user1 = userRepository.findAll();
+        for(User user2 : user1) {
+            Notification notification = new Notification();
+            notification.setMessage("Người dùng "+user.getUsername()+" vừa đăng bài viết "+name);
+            notification.setDate(new Date());
+            notification.setUser(user2);
+            notification.setRead(false);
+            notificationRepository.save(notification);
+        }
 
         return postRepository.save(post);
     }
