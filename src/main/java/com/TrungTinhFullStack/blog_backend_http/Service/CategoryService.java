@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public interface CategoryService {
 
+    List<Category> getAllCategory();
     Category createCategory(Category category);
     Category updateCategory(Long id,Category category);
     Category deleteCategory(Long id);
