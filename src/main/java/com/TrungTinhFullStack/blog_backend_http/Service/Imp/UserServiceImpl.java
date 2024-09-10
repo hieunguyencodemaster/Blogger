@@ -35,9 +35,39 @@ public class UserServiceImpl implements UserService {
     private static final String UPLOAD_DIR = "/uploads";
 
     @Override
-    public User login(String username, String password) {
-        String hashedPassword = hashPassword(password);
-        return userRepository.findByUsernameAndPassword(username, hashedPassword);
+    public ReqRes login(ReqRes reqRes) {
+        ReqRes res = new ReqRes();
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(reqRes.getUsername(), reqRes.getPassword()));
+
+            var user = userRepository.findByUsername(reqRes.getUsername());
+            if (user == null) {
+                throw new BadCredentialsException("User not found");
+            }
+
+            var jwt = jwtUtils.generateToken(user);
+            var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
+
+            res.setStatusCode(200L);
+            res.setMessage("User login success !");
+            res.setId(user.getId());
+            res.setUsername(reqRes.getUsername());
+            res.setImg(user.getImg());
+            res.setToken(jwt);
+            res.setRefreshToken(refreshToken);
+            res.setExpirationTime("24Hrs");
+
+            return res;
+
+        } catch (BadCredentialsException e) {
+            res.setStatusCode(403L);
+            res.setMessage("Invalid credentials");
+            return res;
+        } catch (Exception e) {
+            res.setStatusCode(500L);
+            res.setMessage(e.getMessage());
+            return res;
+        }
     }
 
     @Override
