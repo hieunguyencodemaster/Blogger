@@ -5,6 +5,7 @@ import com.TrungTinhFullStack.blog_backend_http.Entity.Post;
 import com.TrungTinhFullStack.blog_backend_http.Entity.User;
 import com.TrungTinhFullStack.blog_backend_http.Repository.CommentRepository;
 import com.TrungTinhFullStack.blog_backend_http.Repository.PostRepository;
+import com.TrungTinhFullStack.blog_backend_http.Repository.UserRepository;
 import com.TrungTinhFullStack.blog_backend_http.Service.CommentService;
 import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.sql.model.internal.OptionalTableUpdate;
@@ -24,9 +25,12 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public Comment createComment(Post post, User postedBy, String content) {
         if (post == null || postedBy == null) {
-            throw new IllegalArgumentException("Post or User not found");
+            throw new IllegalArgumentException("Required User ID and Post ID ");
         }
 
         Comment comment = new Comment();

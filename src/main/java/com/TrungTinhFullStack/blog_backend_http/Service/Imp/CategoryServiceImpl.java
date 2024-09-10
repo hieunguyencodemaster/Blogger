@@ -28,22 +28,22 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category createCategory(Category category) {
-        Category category1 = categoryRepository.save(category);
-        return category1;
+        Category saveCategory = categoryRepository.save(category);
+        return category;
     }
 
     @Override
     public Category updateCategory(Long id, Category category) {
         Category category1 = categoryRepository.findById(id).orElse(null);
-        category1.setName(category.getName());
-        categoryRepository.save(category1);
-        return category1;
+        category.setName(category.getName());
+        categoryRepository.save(category);
+        return category;
     }
 
     @Override
     public Category deleteCategory(Long id) {
-        Category category1 = categoryRepository.findById(id).orElse(null);
-        categoryRepository.delete(category1);
-        return category1;
+        Category category = categoryRepository.findById(id).orElse(null);
+        categoryRepository.delete(category);
+        return category;
     }
 }
