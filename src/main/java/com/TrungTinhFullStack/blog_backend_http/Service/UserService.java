@@ -25,4 +25,5 @@ public interface UserService {
     User getUserById(Long id);
     User updateUser(Long id, String username, String password, String email, MultipartFile img);
     void deleteUser(Long id);
+    void enableUser(Long userId, boolean enable)
 }
