@@ -3,6 +3,7 @@ package com.TrungTinhFullStack.blog_backend_http.Controller;
 import com.TrungTinhFullStack.blog_backend_http.Entity.Post;
 import com.TrungTinhFullStack.blog_backend_http.Repository.PostRepository;
 import com.TrungTinhFullStack.blog_backend_http.Service.PostService;
+import com.TrungTinhFullStack.blog_backend_http.Service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,9 @@ public class PostController {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private UserService userService;
 
 //    @PostMapping
 //    public ResponseEntity<?> createPost(@RequestBody Post post) {
@@ -124,5 +128,10 @@ public class PostController {
     @GetMapping("/newPost")
     public List <Post> findLast3Posts() {
         return postRepository.findLast3Posts();
+    }
+
+    @PutMapping("/{userId}/enable")
+    public void enableUser(@PathVariable Long userId, @RequestParam boolean enable) {
+        userService.enableUser(userId, enable);
     }
 }
