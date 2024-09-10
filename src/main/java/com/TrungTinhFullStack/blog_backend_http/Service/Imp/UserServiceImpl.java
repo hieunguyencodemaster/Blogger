@@ -1,10 +1,17 @@
 package com.TrungTinhFullStack.blog_backend_http.Service.Imp;
 
+import com.TrungTinhFullStack.blog_backend_http.Dto.ReqRes;
 import com.TrungTinhFullStack.blog_backend_http.Entity.User;
 import com.TrungTinhFullStack.blog_backend_http.Repository.UserRepository;
+import com.TrungTinhFullStack.blog_backend_http.Service.Jwt.JwtUtils;
 import com.TrungTinhFullStack.blog_backend_http.Service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -14,6 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
@@ -21,6 +29,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     private static final String UPLOAD_DIR = "/uploads";
 
     @Override
@@ -49,8 +60,11 @@ public class UserServiceImpl implements UserService {
 
 
         // Hash the password before saving
-        String hashedPassword = hashPassword(password);
+        /*String hashedPassword = hashPassword(password);*/
+/*
         user.setPassword(hashedPassword);
+*/
+        user.setPassword(passwordEncoder.encode(password));
         user.setUsername(username);
         user.setEmail(email);
         user.setImg(fileName);
