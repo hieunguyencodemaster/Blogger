@@ -1,6 +1,7 @@
 package com.TrungTinhFullStack.blog_backend_http.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Getter;
 
@@ -14,6 +15,8 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    @Size( min = 10, message = "Min comment must be at least 10 Characters")
     private String content;
 
     private Date createdAt;
